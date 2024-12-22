@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+>
+<head>
+    <title>Edit users</title>
+</head>
+
+<body>
+<h3>Users</h3>
+<hr/>
+
+<h:panelGroup rendered="#{usersForEdit.user==null}">
+    <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{usersForEdit.user!=null}">
+    <h:form>
+        <h:commandButton action="#{usersForEdit.logout}" value="Logout"></h:commandButton>
+    </h:form>
+    <h:form rendered="#{usersForEdit.canEditUsers}">
+        <h:form>
+            <h:panelGrid columns="7">
+                <h:outputLabel value="UserName"></h:outputLabel>
+                <h:inputText value="#{usersForEdit.userName}"></h:inputText>
+                <h:outputLabel value="Name"></h:outputLabel>
+                <h:inputText value="#{usersForEdit.name}"></h:inputText>
+                <h:panelGroup rendered="#{usersForEdit.canEditLibrarians}">
+                    <h:outputLabel value="Role"></h:outputLabel>
+                    <h:selectOneMenu value="#{usersForEdit.role}">
+                        <f:selectItems value="#{usersForEdit.rolesForSearch.entrySet()}" var="entry"
+                                       itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                    </h:selectOneMenu>
+                </h:panelGroup>
+                <h:commandButton action="#{usersForEdit.getUsersToEdit}" value="Search"></h:commandButton>
+            </h:panelGrid>
+        </h:form>
+        <h:dataTable value="#{usersForEdit.usersToEdit}" var="user">
+            <h:column>
+                <f:facet name="header">UserName</f:facet>
+                <h:button outcome="editUser.xhtml?id=#{user.id}" value="#{user.name}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{user.personal.name}
+            </h:column>
+            <h:column rendered="#{usersForEdit.canEditLibrarians}">
+                <f:facet name="header">Role</f:facet>
+                #{usersForEdit.getRoleName(user.personal.role)}
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    <h:button outcome="mainPage.xhtml" value="Back"/>
+</h:panelGroup>
+</body>
+</html>

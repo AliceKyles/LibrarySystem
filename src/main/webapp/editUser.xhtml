@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+>
+<head>
+    <title>Edit User</title>
+</head>
+
+<body>
+<h3>Edit User</h3>
+<hr/>
+
+<f:metadata>
+    <f:viewParam name="id" value="#{editUser.userId}"/>
+</f:metadata>
+
+<h:panelGroup rendered="#{editUser.user==null}">
+    <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{editUser.user!=null}">
+    <h:panelGroup rendered="#{editUser.canEditThisUser}">
+        <h:outputLabel value="User's information"></h:outputLabel>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="User name: #{editUser.userName}"></h:outputLabel>
+            <h:outputLabel value="Name: #{editUser.name}"></h:outputLabel>
+        </h:panelGrid>
+        <h:panelGroup rendered="#{!editUser.librarian}">
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Date of Birth"></h:outputLabel>
+                    <h:inputText value="#{editUser.dateOfBirth}">
+                        <f:convertDateTime pattern="MM/dd/yyyy"/>
+                    </h:inputText>
+                    <h:commandButton action="#{editUser.birthDayChange}" value="Change"></h:commandButton>
+                </h:panelGrid>
+            </h:form>
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Permissions"></h:outputLabel>
+                    <h:selectOneMenu value="#{editUser.permissions}">
+                        <f:selectItems value="#{editUser.userPermissions.entrySet()}" var="entry"
+                                       itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                    </h:selectOneMenu>
+                    <h:commandButton action="#{editUser.permissionChange}" value="Change"></h:commandButton>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{editUser.canEditLibrarians}">
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Role"></h:outputLabel>
+                    <h:selectOneMenu value="#{editUser.role}">
+                        <f:selectItems value="#{editUser.roles.entrySet()}" var="entry"
+                                       itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                    </h:selectOneMenu>
+                    <h:commandButton action="#{editUser.roleChange}" value="Change"></h:commandButton>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGroup>
+       <h:form>
+          <h:commandButton action="#{editUser.resetPass}" value="Reset password"></h:commandButton>
+       </h:form>
+    </h:panelGroup>
+    <h:form>
+        <h:commandButton action="#{editUser.logout}" value="Logout"></h:commandButton>
+    </h:form>
+    <h:button outcome="usersForEdit.xhtml" value="Back"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{editUser.error!=null}">
+   <h:outputLabel value="Error: "></h:outputLabel>
+   <h:outputLabel value="#{editUser.error}"></h:outputLabel>
+</h:panelGroup>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+<head>
+   <title>Personal Info</title>
+</head>
+
+<body>
+<h3>Personal Info</h3>
+<hr />
+
+<h:panelGroup rendered="#{info.user==null}">
+   <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{info.user!=null}">
+   <h:form>
+      <h:commandButton action="#{info.logout}" value="Logout"></h:commandButton>
+   </h:form>
+   <h:form>
+      <h:outputLabel value="Here's your information"></h:outputLabel>
+      <h:panelGrid columns="3">
+         <h:outputLabel value="Name"></h:outputLabel>
+         <h:inputText  value="#{info.name}"></h:inputText>
+         <h:commandButton action="#{info.nameChange}" value="Change"></h:commandButton>
+      </h:panelGrid>
+   </h:form>
+   <h:panelGroup rendered="#{info.canEditUsers}">
+      <h:form>
+         <h:panelGrid columns="3">
+            <h:outputLabel value="Date of Birth"></h:outputLabel>
+            <h:inputText value="#{info.dateOfBirth}">
+               <f:convertDateTime pattern="MM/dd/yyyy"/>
+            </h:inputText>
+            <h:commandButton action="#{info.birthDayChange}" value="Change"></h:commandButton>
+         </h:panelGrid>
+      </h:form>
+   </h:panelGroup>
+   <h:form>
+      <h:outputLabel value="Change password"></h:outputLabel>
+      <h:panelGrid columns="4">
+         <h:outputLabel value="Enter current password"></h:outputLabel>
+         <h:inputSecret  value="#{info.oldPassword}"></h:inputSecret>
+         <h:outputLabel value="Enter new password"></h:outputLabel>
+         <h:inputSecret  value="#{info.newPassword}"></h:inputSecret>
+         <h:commandButton action="#{info.passwordChange}" value="Change"></h:commandButton>
+      </h:panelGrid>
+      <h:panelGroup rendered="#{info.error!=null}">
+         <h:outputLabel value="Error: "></h:outputLabel>
+         <h:outputLabel value="#{info.error}"></h:outputLabel>
+      </h:panelGroup>
+   </h:form>
+   <h:button outcome="mainPage.xhtml" value="Back"/>
+</h:panelGroup>
+</body>
+</html>

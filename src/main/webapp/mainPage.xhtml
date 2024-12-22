@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+<head>
+    <title>Main</title>
+</head>
+
+<body>
+<h3>Welcome</h3>
+<hr/>
+
+<h:panelGroup rendered="#{mainPage.user==null}">
+    <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{mainPage.user!=null}">
+    <h:form>
+        <h:commandButton action="#{mainPage.logout}" value="Logout"></h:commandButton>
+    </h:form>
+    <h:outputLabel value="Welcome to the library system"></h:outputLabel>
+    <h:panelGrid columns="1">
+        <h:button outcome="info.xhtml" value="View your information"/>
+        <h:button rendered="#{mainPage.canEditUsers}" outcome="usersForEdit.xhtml" value="Edit users"/>
+        <h:button rendered="#{mainPage.canViewBooks}" outcome="availableBooks.xhtml" value="View books"/>
+    </h:panelGrid>
+</h:panelGroup>
+</body>
+</html>

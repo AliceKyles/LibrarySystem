@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+<head>
+   <title>Registration</title>
+</head>
+
+<body>
+<h3>Registration</h3>
+<hr />
+
+<h:form>
+   <h:panelGrid columns="2">
+      <h:outputLabel value="Username"></h:outputLabel>
+      <h:inputText  value="#{registration.name}"></h:inputText>
+   </h:panelGrid>
+   <h:panelGrid columns="2">
+      <h:outputLabel value="Password"></h:outputLabel>
+      <h:inputSecret value="#{registration.password}" ></h:inputSecret>
+   </h:panelGrid>
+   <h:commandButton action="#{registration.register}" value="Register"></h:commandButton>
+</h:form>
+<br/>
+<h:button outcome="login.xhtml" value="Login"/>
+
+<h:panelGroup rendered="#{registration.error!=null}">
+   <h:outputLabel value="Error: "></h:outputLabel>
+   <h:outputLabel value="#{registration.error}"></h:outputLabel>
+</h:panelGroup>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+>
+<head>
+    <title>Available books</title>
+</head>
+
+<body>
+<h3>Books</h3>
+<hr/>
+
+<h:panelGroup rendered="#{availableBooks.user==null}">
+    <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{availableBooks.user!=null}">
+    <h:form>
+        <h:commandButton action="#{availableBooks.logout}" value="Logout"></h:commandButton>
+    </h:form>
+    <h:panelGroup rendered="#{availableBooks.canViewBooks}">
+        <h:button rendered="#{availableBooks.canEditBooks}" outcome="bookEdit.xhtml?id=-1" value="Add new book"/>
+        <h:form>
+            <h:panelGrid columns="11">
+                <h:outputLabel value="Title"></h:outputLabel>
+                <h:inputText value="#{availableBooks.title}"></h:inputText>
+                <h:outputLabel value="Author"></h:outputLabel>
+                <h:inputText value="#{availableBooks.author}"></h:inputText>
+                <h:outputLabel value="Genre"></h:outputLabel>
+                <h:selectOneMenu value="#{availableBooks.genre}">
+                    <f:selectItems value="#{availableBooks.genreNames.entrySet()}" var="entry"
+                                   itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                </h:selectOneMenu>
+                <h:outputLabel value="Is checked out"></h:outputLabel>
+                <h:selectOneMenu value="#{availableBooks.checkedOut}">
+                    <f:selectItems value="#{availableBooks.isCheckedOut.entrySet()}" var="entry"
+                                   itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                </h:selectOneMenu>
+                <h:outputLabel rendered="#{availableBooks.canEditUsers}" value="Checked out by"></h:outputLabel>
+                <h:selectOneMenu rendered="#{availableBooks.canEditUsers}" value="#{availableBooks.checkedOutUser}">
+                    <f:selectItems value="#{availableBooks.userCheckedOut.entrySet()}" var="entry"
+                                   itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+                </h:selectOneMenu>
+                <h:commandButton action="#{availableBooks.getAvailableBooksList}" value="Search"></h:commandButton>
+            </h:panelGrid>
+        </h:form>
+        <h:form>
+            <h:dataTable value="#{availableBooks.availableBooksList}" var="book">
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    <h:button rendered="#{availableBooks.canEditBooks}" outcome="bookEdit.xhtml?id=#{book.id}"
+                              value="#{book.title}"/>
+                    <h:outputLabel rendered="#{!availableBooks.canEditBooks}" value="#{book.title}"></h:outputLabel>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Author</f:facet>
+                    #{book.author}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Genre</f:facet>
+                    #{availableBooks.getGenreName(book.genre)}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Recommended age</f:facet>
+                    #{book.minAge}
+                </h:column>
+                <h:column rendered="#{availableBooks.canEditUsers}">
+                    <f:facet name="header">User checked out the book</f:facet>
+                    <h:button rendered="#{book.user != null}" outcome="editUser.xhtml?id=#{book.user.id}"
+                              value="#{book.user.name}"/>
+                </h:column>
+                <h:column rendered="#{availableBooks.canCheckOutBooks}">
+                    <h:commandButton rendered="#{book.user == null}" action="#{availableBooks.checkOutBook(book)}"
+                                     value="Check out"></h:commandButton>
+                    <h:commandButton rendered="#{book.user.id == availableBooks.user.id}"
+                                     action="#{availableBooks.returnBook(book)}" value="Return"></h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:panelGroup>
+    <h:button outcome="mainPage.xhtml" value="Back"/>
+</h:panelGroup>
+</body>
+</html>

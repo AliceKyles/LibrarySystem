@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+>
+<head>
+   <title>Edit Book</title>
+</head>
+
+<body>
+<h3>Edit Book</h3>
+<hr/>
+
+<f:metadata>
+   <f:viewParam name="id" value="#{bookEdit.bookId}"/>
+</f:metadata>
+
+<h:panelGroup rendered="#{bookEdit.user==null}">
+   <h:button outcome="login.xhtml" value="Please login"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{bookEdit.user!=null}">
+   <h:panelGroup rendered="#{bookEdit.canEditBooks}">
+      <h:form>
+         <h:outputLabel value="Book"></h:outputLabel>
+         <h:panelGrid columns="2">
+            <h:outputLabel value="Title"></h:outputLabel>
+            <h:inputText id="title" value="#{bookEdit.bookToEdit.title}" required="true" requiredMessage="Title is required"></h:inputText>
+            <h:outputLabel value="Author"></h:outputLabel>
+            <h:inputText id ="author" value="#{bookEdit.bookToEdit.author}" required="true" requiredMessage="Author is required"></h:inputText>
+            <h:outputLabel value="Genre"></h:outputLabel>
+            <h:selectOneMenu value="#{bookEdit.bookToEdit.genre}">
+               <f:selectItems value="#{bookEdit.genres.entrySet()}" var="entry"
+                              itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+            </h:selectOneMenu>
+            <h:outputLabel value="Recommended age"></h:outputLabel>
+            <h:inputText value="#{bookEdit.bookToEdit.minAge}"></h:inputText>
+            <h:commandButton action="#{bookEdit.saveBook}" value="Save"></h:commandButton>
+         </h:panelGrid>
+         <h:message for="title" style="color:red"/>
+         <br/>
+         <h:message for="author" style="color:red"/>
+      </h:form>
+      <h:form>
+         <h:commandButton rendered="#{bookEdit.bookToEdit.id != null}" action="#{bookEdit.deleteBook}" value="Delete"></h:commandButton>
+      </h:form>
+   </h:panelGroup>
+   <h:form>
+      <h:commandButton action="#{bookEdit.logout}" value="Logout"></h:commandButton>
+   </h:form>
+   <h:button outcome="availableBooks.xhtml" value="Back"/>
+</h:panelGroup>
+<h:panelGroup rendered="#{bookEdit.error!=null}">
+   <h:outputLabel value="Error: "></h:outputLabel>
+   <h:outputLabel value="#{bookEdit.error}"></h:outputLabel>
+</h:panelGroup>
+</body>
+</html>
